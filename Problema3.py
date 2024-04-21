@@ -65,3 +65,14 @@ df_reactiva.to_excel('ReactivaNuevo.xlsx', index=False)
 
 
 ##GENERAR REPORTES##
+
+#Reporte1
+reporte1 = df_reactiva[['ubigeo','region','provincia','distrito']].drop_duplicates(subset=['ubigeo','region','provincia','distrito'])
+reporte1.to_excel('ReporteLocación.xlsx', index=False)
+
+#Reporte2
+filtro = df_reactiva[(df_reactiva['ambito'] == 'URBANO') & (df_reactiva['puntuacion'].isin([1, 2, 3]))]
+for region, grupo in filtro.groupby('region'):
+    top5 = grupo.sort_values(by='montodeinversion', ascending=False).head(5)
+    if not top5.empty:
+        top5.to_excel(f'./ReportesRegion/Costo_inversion_{region}.xlsx', index=False)
